@@ -45,26 +45,6 @@ class KomplexeZahl
 			return KomplexeZahl(alpha*complex.real, alpha*complex.imag);
 		}
 
-
-/*		// Umrechnung der Komplexen Zahl in Polardarstellung und Berechnung des Betrags
-		double PolarBetrag (double a1, double b1)
-		{
-			double phi = 0;
-			double r = sqrt( a1*a1 + b1*b1 );
-			
-			if ( b1!=0 || a1>0 )
-			{
-				phi = 2*atan( b1/(r + a1) )/M_PI;
-			}
-			if ( b1==0 && a1<0 )
-			{
-				phi = 1;
-			}
-			
-			std::cout << "Winkel φ = " << phi << "π \nBetrag r = ";
-			return r;
-		}
-*/
 		double real;
 		double imag;
 };
@@ -115,29 +95,35 @@ std::ostream& operator<<( std::ostream& output, const KomplexeZahl& complex )
 class KomplexND
 {
 	public:
+	// Methoden
+	void push (KomplexeZahl complex)
+	{
+		complexVector.push_back(complex);
+	}
 
-		std::vector<KomplexeZahl> complexVector;
-		
-		
-		// Methoden
-		void write (KomplexeZahl complex)
+	void pop ()
+	{
+		complexVector.pop_back();
+	}
+	
+	KomplexeZahl at (size_t index)
+	{
+		return complexVector.at(index);
+	}
+
+	size_t size ()
+	{
+		return complexVector.size();
+	}
+
+	void scale (KomplexeZahl complex)
+	{
+		for(size_t i = 0; i < complexVector.size(); i++)
 		{
-			complexVector.push_back(complex);
+			KomplexeZahl::multiplikation( complex, complexVector.at(i) );
 		}
-		
-		KomplexeZahl at (size_t index)
-		{
-			return complexVector.at(index);
-		}
-		size_t size ()
-		{
-			return complexVector.size();
-		}
-		void scale (KomplexeZahl complex)
-		{
-			for(size_t i = 0; i<complexVector.size(); i++)
-			{
-				KomplexeZahl::multiplikation( complex, complexVector.at(i) );
-			}
-		}
+	}
+
+	private:
+	std::vector<KomplexeZahl> complexVector;
 };
